@@ -68,7 +68,7 @@ function getNewsFromApi() {
 }
 
 // This function returns the template NEW to render dynamically in new's page
-function newTemplate({ img, title, author, newUrl, isFavorite }) {
+function newTemplate({ img, title, author, newUrl, isfavourite }) {
     return `<div class="container shadow-lg w-100 my-4" >
                 <div class="row">
                     <div class="col-sm-12 p-0">
@@ -87,8 +87,8 @@ function newTemplate({ img, title, author, newUrl, isFavorite }) {
                 <div class="row" >
                     <div class="col-md-12 col-sm-12 text-center mb-2">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="${newUrl}" onchange="addToMyFavorites(this)" ${isFavorite ? "checked" : "" }>
-                            <label class="form-check-label font-weight-light" for="${newUrl}">Favorite</label>
+                            <input class="form-check-input" type="checkbox" id="${newUrl}" onchange="addToMyfavourites(this)" ${isfavourite ? "checked" : "" }>
+                            <label class="form-check-label font-weight-light" for="${newUrl}">favourite</label>
                         </div>
                     </div>
                 </div>
@@ -98,20 +98,20 @@ function newTemplate({ img, title, author, newUrl, isFavorite }) {
 
 // This function renders all news article in new-container div element using newTemplate function
 // to generate template html to be insert in div news-container
-function renderAllNews(articles, fromFavorites) {
+function renderAllNews(articles, fromfavourites) {
     
     const newsContainer = document.getElementById("news-container");
 
     newsContainer.innerHTML = articles.map((article, index) => {
         
-        let isFavorite;
+        let isfavourite;
 
-        if (fromFavorites) {
+        if (fromfavourites) {
             
-            isFavorite = true;
+            isfavourite = true;
         } else {
 
-            isFavorite = existsInMyFavorites(article.url);
+            isfavourite = existsInMyfavourites(article.url);
         }
         
 
@@ -120,17 +120,17 @@ function renderAllNews(articles, fromFavorites) {
             author: article.author,
             newUrl: article.url,
             title: article.title,
-            isFavorite,
+            isfavourite,
         });
     }).join(' ');
 }
 
-// This function adds a new element in favorites localStorage
-function addToMyFavorites(el) {
+// This function adds a new element in favourites localStorage
+function addToMyfavourites(el) {
 
     
-    if (existsInMyFavorites(el.id)) {
-        removeFromMyFavorites(el.id);
+    if (existsInMyfavourites(el.id)) {
+        removeFromMyfavourites(el.id);
         return;
     }
 
@@ -145,53 +145,53 @@ function addToMyFavorites(el) {
         }
     });
 
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const favourites = JSON.parse(localStorage.getItem("favourites")) || [];
 
-    favorites.push({
+    favourites.push({
         url: elementFound.getAttribute("data-new-id"),
         title: elementFound.getAttribute("data-new-message"),
         author: elementFound.getAttribute("data-new-author"),
         newUrl: elementFound.getAttribute("data-new-id"),
-        isFavorite: true,
+        isfavourite: true,
         urlToImage: elementFound.getAttribute("data-new-img")
     });
 
-    addToLocalStorageFavorites(favorites);
+    addToLocalStoragefavourites(favourites);
 }
 
-// This function says if exists in favorites or not
-function existsInMyFavorites(url) {
+// This function says if exists in favourites or not
+function existsInMyfavourites(url) {
 
-    let favorites = localStorage.getItem("favorites");
+    let favourites = localStorage.getItem("favourites");
 
-    if (!favorites) {
+    if (!favourites) {
         return false;
     }
 
-    favorites = JSON.parse(favorites);
-    return favorites.find(favorite => favorite.url === url);
+    favourites = JSON.parse(favourites);
+    return favourites.find(favourite => favourite.url === url);
 }
 
-// This function removes from favorites
-function removeFromMyFavorites(url) {
+// This function removes from favourites
+function removeFromMyfavourites(url) {
 
-    if (!existsInMyFavorites(url)) {
+    if (!existsInMyfavourites(url)) {
         return;
     }
 
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    const newFavorites = favorites.filter(favorite => favorite.url != url);
+    const favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+    const newfavourites = favourites.filter(favourite => favourite.url != url);
     
-    addToLocalStorageFavorites(newFavorites);
+    addToLocalStoragefavourites(newfavourites);
 }
 
-// This function removes and adds favorites to localStorage
-function addToLocalStorageFavorites(favorites) {
-    localStorage.removeItem("favorites");
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+// This function removes and adds favourites to localStorage
+function addToLocalStoragefavourites(favourites) {
+    localStorage.removeItem("favourites");
+    localStorage.setItem("favourites", JSON.stringify(favourites));
 }
 
-// This function gets all from favorites
-function getAllFromFavorites() {
-    return JSON.parse(localStorage.getItem("favorites"));
+// This function gets all from favourites
+function getAllFromfavourites() {
+    return JSON.parse(localStorage.getItem("favourites"));
 }
