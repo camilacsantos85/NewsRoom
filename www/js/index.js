@@ -68,24 +68,31 @@ function getNewsFromApi() {
 }
 
 // This function returns the template NEW to render dynamically in new's page
-function newTemplate({ img, message, author, newUrl, isFavorite }) {
-    return `<div class="new" >
-                <div class="new-image">
-                    <img src="${img}">
-                </div>
-                <div class="news-informations"> 
-                    <div class="new-message">
-                        <p>${message}</p>
-                    </div>
-                    <div class="new-author">
-                        <p>${author == null ? "" : author}</p>
+function newTemplate({ img, title, author, newUrl, isFavorite }) {
+    return `<div class="container shadow-lg w-100 my-4" >
+                <div class="row">
+                    <div class="col-sm-12 p-0">
+                        <img class="img-fluid rounded shadow w-100" src="${img}">
                     </div>
                 </div>
-                <div class="new-favorite" >
-                    <label for="check">Favorite</label>
-                    <input type="checkbox" id="${newUrl}" onchange="addToMyFavorites(this)" ${isFavorite ? "checked" : "" }>
+                <div class="row mt-2"> 
+                    <div class="col-md-8">
+                        <p class="font-weight-light"> ${title}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="font-weight-bold">${!author || author == null ? "" : author}</p>
+                    </div>
                 </div>
-                <div data-new-id="${newUrl}" data-new-img="${img}" data-new-author="${author}" data-new-message="${message}"></div>
+
+                <div class="row" >
+                    <div class="col-md-12 col-sm-12 text-center mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="${newUrl}" onchange="addToMyFavorites(this)" ${isFavorite ? "checked" : "" }>
+                            <label class="form-check-label font-weight-light" for="${newUrl}">Favorite</label>
+                        </div>
+                    </div>
+                </div>
+                <div data-new-id="${newUrl}" data-new-img="${img}" data-new-author="${!author ? "" : author}" data-new-message='${title}'></div>
             </div>`;
 }
 
@@ -112,7 +119,7 @@ function renderAllNews(articles, fromFavorites) {
             img: article.urlToImage,
             author: article.author,
             newUrl: article.url,
-            message: article.title,
+            title: article.title,
             isFavorite,
         });
     }).join(' ');
