@@ -48,13 +48,13 @@ var app = {
     }
 };
 
-// this function return the date and time to locale as string
+// This function returns the date and time to locale as string
 function getCurrentDateTimeFormatted() {
     let date = new Date();
     return date.toLocaleString();
 }
 
-// this function get news from newsapi.org and
+// This function gets news from newsapi.org and filter news by sports, business and financial as well as by country
 function getNewsFromApi() {
     var sports = new Request('http://newsapi.org/v2/top-headlines?category=sports&apiKey=0fc6d4d1a4e34e4d935d0ef573276d20');
     var business = new Request('http://newsapi.org/v2/top-headlines?category=business&apiKey=0fc6d4d1a4e34e4d935d0ef573276d20');
@@ -67,7 +67,7 @@ function getNewsFromApi() {
     ]);
 }
 
-// this function return the template NEW to render dynamically in new's page
+// This function returns the template NEW to render dynamically in new's page
 function newTemplate({ img, message, author, newUrl, isFavorite }) {
     return `<div class="new" >
                 <div class="new-image">
@@ -89,7 +89,7 @@ function newTemplate({ img, message, author, newUrl, isFavorite }) {
             </div>`;
 }
 
-// this function render all news article in new-container div element using newTemplate function
+// This function renders all news article in new-container div element using newTemplate function
 // to generate template html to be insert in div news-container
 function renderAllNews(articles, fromFavorites) {
     
@@ -118,7 +118,7 @@ function renderAllNews(articles, fromFavorites) {
     }).join(' ');
 }
 
-// this function add element new in favorites localStorage
+// This function adds a new element in favorites localStorage
 function addToMyFavorites(el) {
 
     
@@ -152,7 +152,7 @@ function addToMyFavorites(el) {
     addToLocalStorageFavorites(favorites);
 }
 
-// this function say if exists in favorites or no
+// This function says if exists in favorites or not
 function existsInMyFavorites(url) {
 
     let favorites = localStorage.getItem("favorites");
@@ -165,7 +165,7 @@ function existsInMyFavorites(url) {
     return favorites.find(favorite => favorite.url === url);
 }
 
-// this function remove from favorites
+// This function removes from favorites
 function removeFromMyFavorites(url) {
 
     if (!existsInMyFavorites(url)) {
@@ -178,13 +178,13 @@ function removeFromMyFavorites(url) {
     addToLocalStorageFavorites(newFavorites);
 }
 
-// this function remove and add favorites to localStorage
+// This function removes and adds favorites to localStorage
 function addToLocalStorageFavorites(favorites) {
     localStorage.removeItem("favorites");
     localStorage.setItem("favorites", JSON.stringify(favorites));
 }
 
-// this function get all from favorites
+// This function gets all from favorites
 function getAllFromFavorites() {
     return JSON.parse(localStorage.getItem("favorites"));
 }
